@@ -38,7 +38,7 @@ jobs:
             > assets.tsv
           test "$(wc -l < assets.tsv)" -eq 17
           while IFS=$'\t' read -r id name size digest; do
-            gh api "repos/$REPO/releases/assets/$id" -H 'Accept: application/octet-stream' > "parts/$name"
+            gh api "repos/$REPO/releases/assets/$id" -H 'Accept: application/octet-stream' --allow-escape-sequences > "parts/$name"
             test "$(stat -c%s "parts/$name")" = "$size"
             printf '%s  %s\n' "${digest#sha256:}" "parts/$name" | sha256sum -c -
           done < assets.tsv
